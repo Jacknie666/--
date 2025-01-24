@@ -1,0 +1,28 @@
+import smtplib
+from email.mime.text import MIMEText
+import os
+
+# 从环境变量获取邮箱配置
+SMTP_SERVER = 'smtp.qq.com'
+SMTP_PORT = 587
+EMAIL_ADDRESS = os.getenv('EMAIL_ADDRESS')  # 需在环境变量中设置
+EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')  # 需在环境变量中设置
+RECIPIENT_EMAIL = '收件人邮箱@example.com'  # 目标收件人
+
+# 邮件内容
+message = MIMEText('这是一封测试邮件', 'plain', 'GBK')
+message['Subject'] = '测试邮件'
+message['From'] = EMAIL_ADDRESS
+message['To'] = RECIPIENT_EMAIL
+
+try:
+    server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+    server.starttls()
+    server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+    server.sendmail(EMAIL_ADDRESS, RECIPIENT_EMAIL, message.as_string())
+    print('邮件发送成功')
+except Exception as e:
+    print(f'邮件发送失败: {e}')
+finally:
+    if 'server' in locals():
+        server.quit()
