@@ -1,1 +1,1 @@
-通过 Python 实现的网络爬虫项目，用于定期监控商品价格变化并进行推送通知
+A web crawler project implemented in Python, used to regularly monitor changes in commodity prices and send notifications.
