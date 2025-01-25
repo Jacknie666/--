@@ -1,0 +1,72 @@
+import time
+import requests
+import hashlib
+import json
+
+headers = {
+    'accept': 'application/json',
+    'accept - language': 'zh - CN,zh;q = 0.9,en;q = 0.8,en - GB;q = 0.7,en - US;q = 0.6',
+    'content - type': 'application/x - www - form - urlencoded',
+    'cookie': 'default_cookie_value',
+    'origin': 'https://www.goofish.com',
+    'priority': 'u = 1, i',
+   'referer': 'https://www.goofish.com/',
+   'sec - ch - ua': '"Not A(Brand";v = "8", "Chromium";v = "132", "Microsoft Edge";v = "132"',
+   'sec - ch - ua - mobile': '?0',
+   'sec - ch - ua - platform': '"Windows"',
+   'sec - fetch - dest': 'empty',
+   'sec - fetch - mode': 'cors',
+   'sec - fetch - site':'same - site',
+    'user - agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36 Edg/132.0.0.0'
+}
+
+token = "default_token_value"
+itemId = "default_itemId_value"
+timestamp = str(int(time.time() * 1000))
+print(timestamp)
+
+
+def sign(token: str, timestamp: str, itemId: str) -> str:
+    secret_key = token
+    user_id = "default_user_id_value"
+
+    var_param = json.dumps({"itemId": itemId}, separators=(",", ":"))
+    input_str = f"{secret_key}&{timestamp}&{user_id}&{var_param}"
+
+    sign = hashlib.md5(input_str.encode('utf - 8')).hexdigest()
+    return sign
+
+
+params = {
+    'jsv': '2.7.2',
+    'appKey': 'default_appKey_value',
+    't': timestamp,
+   'sign': sign(token, timestamp, itemId),
+    'v': '1.0',
+    'type': 'originaljson',
+    'accountSite': 'xianyu',
+    'dataType': 'json',
+    'timeout': '20000',
+    'api':'mtop.taobao.idle.pc.detail',
+   'sessionOption': 'AutoLoginOnly',
+   'spm_cnt': 'a21ybx.item.0.0',
+   'spm_pre': 'a21ybx.item.itemCnxh.10.26a83da6EDxKK2',
+    'log_id': '70e63da6ZfbRRG'
+}
+
+data = {
+    'data': '{"itemId":"' + itemId + '"}'
+}
+
+response = requests.post(
+    'https://h5api.m.goofish.com/h5/mtop.taobao.idle.pc.detail/1.0/',
+    params=params,
+    headers=headers,
+    data=data
+)
+
+if response.status_code == 200:
+    print("Price:", response.json()["data"]["itemDO"]["soldPrice"])
+else:
+    print("Request failed, status code:", response.status_code)
+    print("Response content:", response.text)
