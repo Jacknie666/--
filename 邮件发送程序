@@ -1,28 +1,21 @@
-import smtplib
-from email.mime.text import MIMEText
-import os
+# SMTP server address. In practice, you should replace 'smtp.example.com' 
+# with the actual SMTP server address of your email service provider. 
+# For example, it's'smtp.gmail.com' for Gmail and'smtp.qq.com' for QQ mail.
+SMTP_SERVER = 'smtp.example.com'
 
-# 从环境变量获取邮箱配置
-SMTP_SERVER = 'smtp.qq.com'
+# SMTP port number. Usually, 587 is used with STARTTLS encryption, 
+# and 465 is used with SSL encryption. Here we keep 587 as a common example.
 SMTP_PORT = 587
-EMAIL_ADDRESS = os.getenv('EMAIL_ADDRESS')  # 需在环境变量中设置
-EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')  # 需在环境变量中设置
-RECIPIENT_EMAIL = '收件人邮箱@example.com'  # 目标收件人
 
-# 邮件内容
-message = MIMEText('这是一封测试邮件', 'plain', 'GBK')
-message['Subject'] = '测试邮件'
-message['From'] = EMAIL_ADDRESS
-message['To'] = RECIPIENT_EMAIL
+# Sender's email address. Replace 'your_email@example.com' 
+# with your real and valid email address.
+EMAIL_ADDRESS = 'your_email@example.com'
 
-try:
-    server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-    server.starttls()
-    server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-    server.sendmail(EMAIL_ADDRESS, RECIPIENT_EMAIL, message.as_string())
-    print('邮件发送成功')
-except Exception as e:
-    print(f'邮件发送失败: {e}')
-finally:
-    if 'server' in locals():
-        server.quit()
+# Email password or authorization code. If you're using QQ mail, 
+# you should use the authorization code instead of the regular login password. 
+# Replace 'your_email_password' with the actual password or code.
+EMAIL_PASSWORD = 'your_email_password'
+
+# Recipient's email address. Replace'recipient@example.com' 
+# with the real email address of the person you want to send the email to.
+RECIPIENT_EMAIL ='recipient@example.com'
